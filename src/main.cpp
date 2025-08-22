@@ -7,8 +7,10 @@
 #include <Wire.h>
 #define REMOTEXY_MODE__ESP32CORE_BLE
 
-#include <BLEDevice.h>
 
+#include <motor_TB.h>
+c_motor_TB motor1,motor2,motor3,motor4;
+#include <BLEDevice.h>
 // RemoteXY connection settings 
 #define REMOTEXY_BLUETOOTH_NAME "RemoteXY"
 
@@ -72,10 +74,10 @@ float t = 0.004;  // time cycle (250Hz)
 
 
 
-const int mot1_pin = 13;
+/*const int mot1_pin = 13;
 const int mot2_pin = 12;
 const int mot3_pin = 14;
-const int mot4_pin = 27;
+const int mot4_pin = 27;*/
 
 // RC receiver variables
 volatile uint32_t current_time;
@@ -210,6 +212,7 @@ void pid_equation(float Error, float P, float I, float D, float PrevError, float
 }
 void setup(){
   RemoteXY_Init ();
+  
   Wire.setClock(400000);
   Wire.begin();
   delay(250);
@@ -225,6 +228,10 @@ void setup(){
 
   delay(1000);
   /// settting motors and shit type shii
+  motor1.setPins(21,20,10,1);
+  motor2.setPins(21,20,9,1);
+  motor3.setPins(4,5,2,0);
+  motor4.setPins(4,5,3,0);
 
 
 
@@ -406,12 +413,29 @@ void loop(void) {
     PrevItermAngleRoll = 0; PrevItermAnglePitch = 0;
   }
 
-  // NOTE: For TB6612 with DC motors, you'll need to replace this with motor driver control
-  // Convert the motor inputs to appropriate signals for your TB6612 driver
-  mot1.writeMicroseconds(MotorInput1);
-  mot2.writeMicroseconds(MotorInput2);
-  mot3.writeMicroseconds(MotorInput3);
-  mot4.writeMicroseconds(MotorInput4);
+  MotorInput1=map(MotorInput1,1000,2000,0,255);
+  MotorInput2=map(MotorInput2,1000,2000,0,255);
+  MotorInput3=map(MotorInput3,1000,2000,0,255);
+  MotorInput4=map(MotorInput4,1000,2000,0,255);
+  motor1.motor_speed(MotorInput1);
+  motor2.motor_speed(MotorInput2);
+  motor3.motor_speed(MotorInput3);
+  motor4.motor_speed(MotorInput4);
+  /* motors order so i don't fuck it up 
+
+  Motor 1: Front Right → Counter-Clockwise (CCW)
+
+Motor 2: Rear Right → Clockwise (CW)
+
+Motor 3: Rear Left → Counter-Clockwise (CCW)
+
+Motor 4: Front Left → Clockwise (CW)
+*/
+  
+  //mot1.writeMicroseconds(MotorInput1);
+  //mot2.writeMicroseconds(MotorInput2);
+  //mot3.writeMicroseconds(MotorInput3);
+  //mot4.writeMicroseconds(MotorInput4); yeah not happenning son
 
   // Maintain loop timing
   while (micros() - LoopTimer < (t * 1000000)) {
