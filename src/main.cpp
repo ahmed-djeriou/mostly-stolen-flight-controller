@@ -242,10 +242,10 @@ void setup(){
 }
 void loop(void) {
   RemoteXY_Handler ();
-  ReceiverValue[0] = map(RemoteXY.jx2 /*roll*/, -100, 100, 1000, 2000);    // Roll
-  ReceiverValue[1] = map(RemoteXY.jy2/*pitch*/, -100, 100, 1000, 2000);   // Pitch
-  ReceiverValue[2] = map(RemoteXY.jy1/*throttle*/, 0, 100, 1000, 2000);   // Throttle
-  ReceiverValue[3] = map(RemoteXY.jx1/*yaw*/, -100, 100, 1000, 2000);     // Yaw
+  ReceiverValue[0] = map(RemoteXY.jy2 /*roll*/, -100, 100, 1000, 2000);    // Roll
+  ReceiverValue[1] = map(RemoteXY.jx2/*pitch*/, -100, 100, 1000, 2000);   // Pitch
+  ReceiverValue[2] = map(RemoteXY.jx1/*throttle*/, 0, 100, 1000, 2000);   // Throttle
+  ReceiverValue[3] = map(RemoteXY.jy1/*yaw*/, -100, 100, 1000, 2000);     // Yaw
   
   // Read IMU data
   Wire.beginTransmission(0x68);
